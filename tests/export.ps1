@@ -23,8 +23,8 @@ $jobs = @(
     @{ Name = "Small2"; File = $SmallFile; Size = "small" }
 )
 
-Write-Host "`n=== Starting 4 parallel uploads ===" -ForegroundColor Cyan
 $total = $jobs.Count
+Write-Host "`n=== Starting $total parallel uploads ===" -ForegroundColor Cyan
 $current = 0
 
 # Локальные копии для параллельного блока
