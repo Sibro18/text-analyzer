@@ -1,0 +1,12 @@
+*.xlsx
+*.txt
+!requirements.txt
+
+.venv/
+.vscode/
+__pycache__/
+
+*.pyc
+*.tmp
+*.db
+*.log

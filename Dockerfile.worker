@@ -1,0 +1,12 @@
+# Dockerfile.worker
+FROM python:3.13-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY src/ .
+
+CMD ["celery", "-A", "apps.celery_app", "worker", "--concurrency=4", "--loglevel=info"]
