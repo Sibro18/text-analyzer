@@ -1,6 +1,7 @@
 from celery import Celery
-from features.text_analyzer import analyzer
-from core.config import Config
+
+from src.features.text_analyzer import analyzer
+from src.core.config import Config
 
 
 celery_app = Celery(

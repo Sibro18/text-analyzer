@@ -3,9 +3,9 @@ from fastapi.responses import FileResponse
 from uuid import uuid4
 
 
-from features.text_analyzer import analyzer
-from apps.celery_app import process_file
-from features.text_analyzer.types import AnalyzeStatus
+from src.features.text_analyzer import analyzer
+from src.apps.celery_app import process_file
+from src.features.text_analyzer.types import AnalyzeStatus
 
 router = APIRouter()
 

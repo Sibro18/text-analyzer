@@ -1,39 +1,41 @@
 services:
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: fastapi_app
-    ports:
-      - "8000:8000"
-    depends_on:
-      - worker
-    volumes:
-      - ./files:/app/files
-    env_file:
-      - .env
-    environment:
-      - CELERY_BROKER_URL
-      - CELERY_RESULT_BACKEND
-
-  worker:
-    build:
-      context: .
-      dockerfile: Dockerfile.worker
-    container_name: celery_worker
-    depends_on:
-      - redis
-    volumes:
-      - ./files:/app/files
-    env_file:
-      - .env
-    environment:
-      - CELERY_BROKER_URL
-      - CELERY_RESULT_BACKEND
-
-
   redis:
-    image: redis:7
-    container_name: redis
+    image: redis:latest
+    container_name: redis 
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 2s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - redis_data:/data
+  celery_app:
+    build:
+      context: .
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./files:/app/files
+    command: celery -A src.apps.celery_app worker --concurrency=4 --loglevel=info
+  fastapi_app:
+    build:
+      context: .
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./files:/app/files
+    ports:
+      - 8000:8000
+    command: uvicorn src.apps.fastapi_app:app --host 0.0.0.0 --port 8000
+
+volumes:
+  redis_data:
+    external: false # if true: "docker-compose up" does not attempt to create it. 

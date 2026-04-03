@@ -1,4 +1,4 @@
-from core.config import Config
+from src.core.config import Config
 from .analyzer import TextAnalyzer
 
 analyzer = TextAnalyzer(

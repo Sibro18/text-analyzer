@@ -1,10 +1,10 @@
 from fastapi import FastAPI
-from api.report import router as report_router
 from contextlib import asynccontextmanager
 import os
 import asyncio
 
-from features.text_analyzer import analyzer
+from src.api.report import router as report_router
+from src.features.text_analyzer import analyzer
 
 
 async def cleanup_old_files():
